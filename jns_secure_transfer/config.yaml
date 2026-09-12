@@ -1,0 +1,34 @@
+name: JNS Secure Transfer Gateway
+version: "0.2.0"
+slug: jns_secure_transfer
+description: Secure SFTP-only ingress and validated JNS package handoff for Home Assistant.
+url: https://github.com/jamienewton2269/JNS-Home-Assistant-Deployment
+arch:
+  - amd64
+  - aarch64
+startup: services
+boot: auto
+init: false
+host_network: false
+map:
+  - type: homeassistant_config
+    read_only: false
+ports:
+  22/tcp: 2222
+ports_description:
+  22/tcp: JNS Secure SFTP
+options:
+  authorized_keys: []
+  jns_handoff:
+    enabled: true
+    require_native_jns_signature: true
+    verify_against_jns_trust: true
+    allow_trust_enrolment: false
+schema:
+  authorized_keys:
+    - str
+  jns_handoff:
+    enabled: bool
+    require_native_jns_signature: bool
+    verify_against_jns_trust: bool
+    allow_trust_enrolment: bool
