@@ -99,6 +99,15 @@ for kind in ed25519 rsa; do
   fi
 done
 
+# Log the persistent server fingerprints so an operator can verify the
+# repository-managed App during migration before replacing an existing pin.
+log "SSH host key fingerprints (verify before accepting a changed host key):"
+for public_key in "${HOSTKEY_DIR}"/*.pub; do
+  if [ -f "${public_key}" ]; then
+    ssh-keygen -lf "${public_key}" -E sha256 | sed 's/^/[JNS Secure Transfer]   /'
+  fi
+done
+
 cat > "${SSHD_CONFIG}" <<EOF
 Port 22
 Protocol 2

@@ -1,4 +1,4 @@
-# JNS Secure Transfer Gateway v0.2.0
+# JNS Secure Transfer Gateway v0.2.1
 
 Home Assistant App providing the restricted SFTP ingress used by the JNS deployment system.
 
@@ -64,8 +64,20 @@ Only an enabled publisher with the required `config`/`platform` scope and a vali
 
 This directory is the Home Assistant App source directory. Publish the `jns_secure_transfer` folder in a Home Assistant App repository and set the repository metadata accordingly.
 
-After refreshing the App repository, Home Assistant should offer version `0.2.0`.
+After refreshing the App repository, Home Assistant should offer version `0.2.1`.
 
 ## Source and release archives
 
 The source release is intentionally separate from JNS config deployment packages. The Gateway itself is a Home Assistant App and must be built/updated by Supervisor.
+
+
+## Migration release
+
+v0.2.1 is the supported migration target from the earlier local
+`local_jns_secure_transfer` App to the Git-managed App distributed through
+`https://github.com/jamienewton2269/HA`.
+
+See `MIGRATION.md` before stopping or removing the existing local Gateway.
+The new App logs its persistent SSH host-key SHA-256 fingerprints at startup so
+the Windows Manager's pinned host identity can be replaced only after explicit
+verification.
