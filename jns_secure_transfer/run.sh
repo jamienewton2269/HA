@@ -31,6 +31,12 @@ if ! id "${TRANSFER_USER}" >/dev/null 2>&1; then
   adduser -S -D -H -s /sbin/nologin -G "${TRANSFER_USER}" "${TRANSFER_USER}"
 fi
 
+# Alpine creates the system account with a locked shadow entry. OpenSSH rejects
+# a locked account before public-key authentication is evaluated, so clear only
+# the local password hash. SSH password and keyboard-interactive authentication
+# remain disabled below and AuthenticationMethods still requires publickey.
+passwd -d "${TRANSFER_USER}" >/dev/null 2>&1 || die "Unable to unlock SFTP transfer account for public-key authentication"
+
 # OpenSSH ChrootDirectory must be root-owned and not writable by the user.
 chown root:root "${CHROOT_ROOT}"
 chmod 0755 "${CHROOT_ROOT}"
@@ -79,8 +85,10 @@ if not lines:
 dest.write_text("\n".join(lines) + "\n", encoding="utf-8")
 PY
 
+# Keep the file root-owned so the transfer user cannot modify its own trust
+# material, but make the public key readable after sshd drops privileges.
 chown root:root "${AUTHORIZED_FILE}"
-chmod 0600 "${AUTHORIZED_FILE}"
+chmod 0644 "${AUTHORIZED_FILE}"
 
 # Generate server host keys once per App data volume when possible.
 HOSTKEY_DIR="/data/ssh_host_keys"
@@ -125,7 +133,6 @@ AuthenticationMethods publickey
 AuthorizedKeysFile ${AUTHORIZED_DIR}/%u
 
 AllowUsers ${TRANSFER_USER}
-UsePAM no
 PrintMotd no
 X11Forwarding no
 AllowAgentForwarding no
