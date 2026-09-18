@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.3 — JNS v5.1.2+ inbox compatibility
+
+- Fixes the 60-second Windows Manager handoff timeout when the Deployment Platform uses the v5.1.2+ direct SFTP inbox at `/config/jns/sftp/incoming`.
+- The Gateway now prefers `jns/sftp/incoming` when that directory exists and falls back to the legacy `jns/inbox` path for older JNS platform versions.
+- Keeps public-key-only SFTP, trusted-publisher verification, signature/hash validation, quarantine and atomic handoff unchanged.
+- No Home Assistant package is installed by this update; it only corrects the Gateway destination path.
+
+
 ## 0.2.2 — reboot-persistence fix
 
 - Fixes `jnstransfer` public-key authentication after App restart/rebuild by clearing the Alpine system-account lock at startup while keeping SSH password authentication disabled.
