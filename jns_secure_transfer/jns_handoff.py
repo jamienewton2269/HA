@@ -90,6 +90,26 @@ def locate_trust_store(ha_config: Path) -> Path:
     return candidates[0]
 
 
+def locate_deployment_inbox(ha_config: Path) -> Path:
+    """Return the deployment inbox used by the installed JNS platform.
+
+    JNS v5.1.2+ uses jns/sftp/incoming so the standards-based SFTP transport
+    can write directly into the deployment inbox. Older v5 releases used
+    jns/inbox. Prefer the new inbox whenever it exists, but retain the legacy
+    fallback so Gateway v0.2.3 can bridge both platform generations.
+    """
+    direct = ha_config / "jns" / "sftp" / "incoming"
+    legacy = ha_config / "jns" / "inbox"
+
+    if direct.is_dir():
+        return direct
+    if legacy.is_dir():
+        return legacy
+
+    # New installations should converge on the v5.1.2+ layout.
+    return direct
+
+
 def load_publishers(path: Path) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
     if not path.is_file():
         raise GatewayError(f"JNS publisher trust store is missing: {path}")
@@ -438,7 +458,7 @@ def process_file(
     settings: Settings,
     ha_config: Path,
 ) -> None:
-    inbox = ha_config / "jns" / "inbox"
+    inbox = locate_deployment_inbox(ha_config)
     quarantine_dir = ha_config / "jns" / "quarantine"
     trust_store = locate_trust_store(ha_config)
 
@@ -497,7 +517,7 @@ def watch(
     stable_state: dict[str, tuple[int, int]] = {}
 
     log(f"Watching {incoming}")
-    log(f"JNS inbox: {ha_config / 'jns' / 'inbox'}")
+    log(f"JNS inbox: {locate_deployment_inbox(ha_config)}")
     log(f"Trust store: {locate_trust_store(ha_config)}")
 
     while True:
