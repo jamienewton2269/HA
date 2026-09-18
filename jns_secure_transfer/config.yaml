@@ -1,5 +1,5 @@
 name: JNS Secure Transfer Gateway
-version: "0.2.2"
+version: "0.2.3"
 slug: jns_secure_transfer
 description: Secure SFTP-only ingress and validated JNS package handoff for Home Assistant.
 url: https://github.com/jamienewton2269/HA
