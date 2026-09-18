@@ -84,3 +84,14 @@ The source release is intentionally separate from JNS config deployment packages
 v0.2.2 supersedes v0.2.1 as the supported Git-managed Gateway release. Existing App options, authorized public keys, trust-store mappings and persistent host keys are retained by Supervisor/App data storage across normal upgrades.
 
 See `MIGRATION.md` when migrating from the earlier local `local_jns_secure_transfer` App.
+
+
+## v0.2.3 compatibility note
+
+Gateway v0.2.3 bridges both JNS inbox layouts. When the installed Deployment
+Platform exposes the v5.1.2+ direct transport inbox, accepted packages are
+handed to `/homeassistant/jns/sftp/incoming`. Older installations continue to
+use `/homeassistant/jns/inbox`.
+
+This prevents a valid SFTP upload from being stranded in the legacy inbox after
+the Deployment Platform has moved to the direct SFTP inbox.
