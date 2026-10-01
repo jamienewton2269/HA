@@ -1,0 +1,11 @@
+# Enable RLM
+rlm:
+
+# Example timed actuator
+# actions:
+#   - action: rlm.start
+#     data:
+#       entity_id: fan.wc_extractor
+#       max_runtime_seconds: 40
+#       activate: true
+#       source: downstairs_wc_motion_clear
