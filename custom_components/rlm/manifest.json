@@ -1,0 +1,10 @@
+{
+  "domain": "rlm",
+  "name": "RLM - Runtime Lease Manager",
+  "version": "0.1.0",
+  "documentation": "https://github.com/jamienewton2269/HA/tree/main/custom_components/rlm",
+  "issue_tracker": "https://github.com/jamienewton2269/HA/issues",
+  "integration_type": "service",
+  "iot_class": "local_push",
+  "codeowners": []
+}
