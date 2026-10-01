@@ -1,0 +1,61 @@
+start:
+  name: Start runtime lease
+  description: Create or replace a bounded runtime lease and optionally turn the entity on.
+  fields:
+    entity_id:
+      name: Entity
+      required: true
+      selector:
+        entity: {}
+    max_runtime_seconds:
+      name: Maximum runtime
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 604800
+          unit_of_measurement: seconds
+          mode: box
+    activate:
+      name: Turn entity on
+      description: Turn the entity on after the lease has been safely persisted.
+      default: true
+      selector:
+        boolean: {}
+    source:
+      name: Source
+      description: Short human-readable reason or automation name.
+      selector:
+        text: {}
+
+complete:
+  name: Complete runtime lease
+  description: Remove an active lease after a normal device stop.
+  fields:
+    entity_id:
+      name: Entity
+      required: true
+      selector:
+        entity: {}
+    reason:
+      name: Reason
+      selector:
+        text: {}
+
+cancel:
+  name: Cancel runtime lease
+  description: Remove an active lease without changing the entity state.
+  fields:
+    entity_id:
+      name: Entity
+      required: true
+      selector:
+        entity: {}
+    reason:
+      name: Reason
+      selector:
+        text: {}
+
+reconcile:
+  name: Reconcile active leases
+  description: Recalculate all active leases against their absolute deadlines now.
